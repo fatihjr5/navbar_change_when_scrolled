@@ -6,10 +6,10 @@ export const Navbar = () => {
   const [isFixed, setIsFixed] = useState(false);
 
   function fixedNavbar() {
-    if (window.scrollY > 100 == isFixed) {
+    if (window.scrollY > 100) {
       setIsFixed(true);
-    } else {
-      setIsFixed(false);
+    } if (window.scrollY < 100) {
+        setIsFixed(false)
     }
   }
 
@@ -21,7 +21,7 @@ export const Navbar = () => {
   }, []);
   
   return (
-    <nav className={`px-10 lg:px-20 py-4 z-50 duration-200 ease-in ${isFixed ? 'fixed w-full top-0 bg-white shadow-sm' : 'relative bg-transparent text-black'}`}>
+    <nav className={`px-10 lg:px-20 py-4 z-50 duration-75 ease-in ${isFixed ? 'fixed w-full top-0 bg-white shadow-sm' : 'relative bg-transparent text-black'}`}>
        <div className="flex flex-row items-center justify-between">
         <section className="flex flex-row items-center">
             {/* logo */}
