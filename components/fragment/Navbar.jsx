@@ -6,7 +6,7 @@ export const Navbar = () => {
   const [isFixed, setIsFixed] = useState(false);
 
   function fixedNavbar() {
-    if (window.pageYOffset >= isFixed) {
+    if (window.scrollY > 100 == isFixed) {
       setIsFixed(true);
     } else {
       setIsFixed(false);
