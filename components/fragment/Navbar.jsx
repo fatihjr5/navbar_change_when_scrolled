@@ -1,27 +1,40 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react'
+import { Popover } from '@headlessui/react'
+
+const OFFSET = 60;
 
 export const Navbar = () => {
-  const [isFixed, setIsFixed] = useState(false);
+  const [isFixed, setIsFixed] = useState(true);
+  const [lastScrollPosition, setLastScrollPosition] = useState(0);
+  const [scrollValue, setScrollValue] = useState(0);  
 
-  function fixedNavbar() {
-    if (window.scrollY > 100) {
-      setIsFixed(true);
-    } if (window.scrollY < 100) {
-        setIsFixed(false)
+  function onScroll() {
+    if (window.pageYOffset < 0) {
+      return;
     }
+    if (Math.abs(window.pageYOffset - lastScrollPosition) > OFFSET) {
+      return;
+    }
+    setIsFixed(window.pageYOffset < lastScrollPosition);
+    setLastScrollPosition(window.pageYOffset);
   }
 
   useEffect(() => {
-    window.addEventListener('scroll', fixedNavbar)
+    setLastScrollPosition(window.pageYOffset);
+    window.addEventListener('scroll', onScroll);
+    const viewportMeta = document.createElement('meta');
+    viewportMeta.name = 'viewport';
+    viewportMeta.content = 'width=device-width, initial-scale=1';
+    document.head.appendChild(viewportMeta);
     return () => {
-        window.removeEventListener('scroll', fixedNavbar)
+      window.removeEventListener('scroll', onScroll);
     };
   }, []);
   
   return (
-    <nav className={`px-10 lg:px-20 py-4 z-50 duration-75 ease-in ${isFixed ? 'fixed w-full top-0 bg-white shadow-sm' : 'relative bg-transparent text-black'}`}>
+    <nav className={`px-10 lg:px-20 py-4 z-50 duration-75 ease-in ${isFixed ? 'fixed w-full top-0 bg-white shadow-sm' : 'block bg-transparent text-black'}`}>
        <div className="flex flex-row items-center justify-between">
         <section className="flex flex-row items-center">
             {/* logo */}
@@ -32,7 +45,19 @@ export const Navbar = () => {
             <section className="lg:flex flex-row items-center gap-x-4 ml-10 hidden">
                 <Link href="#" className='text-gray-400 font-normal'>Home</Link>
                 <Link href="#" className='text-gray-400 font-normal'>Product</Link>
-                <Link href="#" className='text-gray-400 font-normal'>Promo Day</Link>
+                <Popover>
+                  <Popover.Button className="focus:outline-none text-gray-400">Solutions</Popover.Button>
+                  <Popover.Panel className="fixed w-full bg-white shadow-sm mx-auto px-20 left-0 z-10 mt-4">
+                    <div className="flex flex-col lg:flex-row items-center justify-between rounded-xl border-t py-4 gap-4">
+                      <a href="/analytics">Analytics</a>
+                      <a href="/engagement">Engagement</a>
+                      <a href="/engagement">Engagement</a>
+                      <a href="/engagement">Engagement</a>
+                      <a href="/engagement">Engagement</a>
+                      <a href="/engagement">Engagement</a>
+                    </div>
+                  </Popover.Panel>
+                </Popover>
             </section>
         </section>
         {/* button */}
